@@ -50,7 +50,7 @@ namespace Transformaciones
             canvas.ClearCanvas(Color.Black); // Limpia el canvas
             figuraActual.Render(canvas); // Asegúrate de que Render use los puntos actualizados
             PCT_CANVAS.Image = bmp;
-            LBL_CENTROIDE.Text = $"Centroide: X={figuraActual.centroid.X:F2}, Y={figuraActual.centroid.Y:F2}";
+            LBL_CENTROIDE.Text = $"Centroidee: X={figuraActual.centroid.X:F2}, Y={figuraActual.centroid.Y:F2}";
        
         }
 
