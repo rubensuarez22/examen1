@@ -67,7 +67,11 @@ namespace Transformaciones
             Translate(centroide);
         }
 
-
+        public void TranslateToCenter()
+        {
+            Vertex centroide = CalcularCentroide();
+            Translate(new Vertex(new float[] { -centroide[0], -centroide[1], -centroide[2] }));
+        }
 
         // Método para trasladar la figura
         public void Translate(Vertex translation)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -16,7 +17,6 @@ namespace Transformaciones
 {
     public partial class Form1 : Form
     {
-        //Clase figura con lista de puntos. 
 
         static Bitmap bmp;
         private Canvas canvas;
@@ -24,6 +24,7 @@ namespace Transformaciones
 
         private float angle = 0.0f;
         private float deltaAngle = 2.0f;
+        List<KeyFrame> keyFrames = new List<KeyFrame>();
 
         public Form1()
         {
@@ -35,8 +36,8 @@ namespace Transformaciones
             canvas = new Canvas(bmp);
 
             canvas.cruzCanvas();
-
             
+
 
             PCT_CANVAS.Image = bmp;
 
@@ -47,16 +48,16 @@ namespace Transformaciones
 
             TRACKBAR_ANGLE.Minimum = -10;
             TRACKBAR_ANGLE.Maximum = 10; 
-            TRACKBAR_ANGLE.Value = 0; // Valor inicial
+            TRACKBAR_ANGLE.Value = 0;
             TRACKBAR_ANGLE.Scroll += TRACKBAR_ANGLE_Scroll;
             TRACKBAR_ANGLE.MouseUp += TRACKBAR_MouseUp;
 
 
-            TRACKBAR_SCALE.Minimum = -10;  // Representa un factor de escala de -1.0 (reducción al 10% del tamaño original)
-            TRACKBAR_SCALE.Maximum = 10;   // Representa un factor de escala de 1.0 (aumento al doble del tamaño original)
-            TRACKBAR_SCALE.Value = 0;      // Valor inicial en el centro, que representa un factor de escala de 1.0 (sin cambio de tamaño)
-            TRACKBAR_SCALE.TickFrequency = 1; // Establece la frecuencia de los ticks para que cada movimiento sea de 0.1 en escala
-            TRACKBAR_SCALE.SmallChange = 1;   // Cambio pequeño para el control TrackBar (esto hace que el control responda a pequeños cambios)
+            TRACKBAR_SCALE.Minimum = -10;  
+            TRACKBAR_SCALE.Maximum = 10;   
+            TRACKBAR_SCALE.Value = 0;      
+            TRACKBAR_SCALE.TickFrequency = 1; 
+            TRACKBAR_SCALE.SmallChange = 1;  
             TRACKBAR_SCALE.LargeChange = 1;
             TRACKBAR_SCALE.Scroll += TRACKBAR_SCALE_Scroll;
             TRACKBAR_SCALE.MouseUp += TRACKBAR_MouseUp;
@@ -73,7 +74,7 @@ namespace Transformaciones
 
         private void Redibujar()
         {
-            canvas.ClearCanvas(Color.Black); // Limpia el canvas
+            canvas.ClearCanvas(Color.Black); 
             canvas.cruzCanvas();
             if (figuraActual != null)
             {
@@ -81,8 +82,8 @@ namespace Transformaciones
             }
             PCT_CANVAS.Image = bmp;
 
-            Vertex centroide = figuraActual.CalcularCentroide(); // Usamos el nuevo método para obtener el centroide
-                                                                 // Actualizamos el texto del Label para mostrar las coordenadas del centroide, teniendo en cuenta que es un Vertex ahora
+            Vertex centroide = figuraActual.CalcularCentroide(); 
+                                                                
             LBL_CENTROIDE.Text = $"Centroide: X={centroide[0]:F2}, Y={centroide[1]:F2}, Z={centroide[2]:F2}";
         }
 
@@ -101,28 +102,28 @@ namespace Transformaciones
         }
         private void BTN_UP_Click(object sender, EventArgs e)
         {
-            // Mueve la figura hacia arriba en 10 unidades
+            
             figuraActual.Translate(new Vertex(new float[] { 0, 10, 0 }));
             Redibujar();
         }
 
         private void BTN_DOWN_Click(object sender, EventArgs e)
         {
-            // Mueve la figura hacia abajo en 10 unidades
+            
             figuraActual.Translate(new Vertex(new float[] { 0, -10, 0 }));
             Redibujar();
         }
 
         private void BTN_LEFT_Click(object sender, EventArgs e)
         {
-            // Mueve la figura hacia la izquierda en 10 unidades
+            
             figuraActual.Translate(new Vertex(new float[] { -10, 0, 0 }));
             Redibujar();
         }
 
         private void BTN_TRASLATE_Click(object sender, EventArgs e)
         {
-            // Mueve la figura hacia la derecha en 10 unidades
+         
             figuraActual.Translate(new Vertex(new float[] { 10, 0, 0 }));
             Redibujar();
         }
@@ -179,13 +180,13 @@ namespace Transformaciones
 
         private void BTN_TranslateToCenter_Click(object sender, EventArgs e)
         {
-            //figuraActual.TranslateToCenter();
+            figuraActual.TranslateToCenter();
             Redibujar();
         }
 
         private void Checkbox_Rotacion_CheckedChanged(object sender, EventArgs e)
         {
-            // Habilita el Timer si alguno de los checkboxes está seleccionado
+            
             TIMER1.Enabled = CHECKBOX_RotacionX.Checked || CHECKBOX_RotacionY.Checked || CHECKBOX_RotacionZ.Checked;
         }
 
@@ -196,19 +197,19 @@ namespace Transformaciones
                 // Convertir deltaAngle a radianes una sola vez
                 float deltaAngleRadians = deltaAngle * (float)(Math.PI / 180);
 
-                // Rotar figura alrededor del eje X si el checkbox correspondiente está seleccionado
+                // Rotar figura alrededor del eje X 
                 if (CHECKBOX_RotacionX.Checked)
                 {
                     figuraActual.RotateAroundX(deltaAngleRadians);
                 }
 
-                // Rotar figura alrededor del eje Y si el checkbox correspondiente está seleccionado
+                // Rotar figura alrededor del eje Y 
                 if (CHECKBOX_RotacionY.Checked)
                 {
                     figuraActual.RotateAroundY(deltaAngleRadians);
                 }
 
-                // Rotar figura alrededor del eje Z si el checkbox correspondiente está seleccionado
+                // Rotar figura alrededor del eje Z 
                 if (CHECKBOX_RotacionZ.Checked)
                 {
                     figuraActual.RotateAroundZ(deltaAngleRadians);
@@ -222,7 +223,7 @@ namespace Transformaciones
         {
             if (figuraActual != null)
             {
-                // Convierte el valor del TrackBar a un factor de escala (dividiendo por 10 para obtener incrementos de 0.1)
+                
                 float scaleFactor = 1 + (TRACKBAR_SCALE.Value / 20.0f);
 
                 figuraActual.ScaleFigure(scaleFactor);
@@ -232,7 +233,11 @@ namespace Transformaciones
 
         private void BTN_KEYFRAME_Click(object sender, EventArgs e)
         {
+            float currentTime = TRACKBAR_TIME.Value; // Asumiendo que TRACKBAR_TIME mide el tiempo en segundos
+            var currentVertices = figuraActual.Puntos; // Asume que tienes una forma de obtener los vértices actuales de la figura
 
+            keyFrames.Add(new KeyFrame(currentTime, currentVertices));
+            LBL_KEYFRAMES.Text = $"KeyFrames: {keyFrames.Count}";
         }
 
 
@@ -244,21 +249,78 @@ namespace Transformaciones
             switch (selectedNode.Text)
             {
                 case "Cuadrado":
-                    // Código para manejar la selección de cuadrado
-                    figuraActual = new Cuadrado(50); // Asume que tienes una clase Cuadrado
+                   
+                    figuraActual = new Cuadrado(50);
                     break;
                 case "Circulo":
-                    // Código para manejar la selección de círculo
-                    figuraActual = new Circulo(50); // Asume que tienes una clase Circulo
+                   
+                    figuraActual = new Circulo(50); 
                     break;
                 case "Triangulo":
-                    // Código para manejar la selección de triángulo
-                    figuraActual = new Triangle(50); // Asume que tienes una clase Triangulo
+                   
+                    figuraActual = new Triangle(50);
                     break;
             }
 
             // Finalmente, redibuja la figura seleccionada
             Redibujar();
+        }
+
+        private void BTN_PLAY_Click(object sender, EventArgs e)
+        {
+            if (keyFrames.Count < 2)
+            {
+                MessageBox.Show("Necesitas al menos 2 KeyFrames para la animación.");
+                return;
+            }
+
+            // Ordena los KeyFrames por tiempo para asegurarte de que estén en el orden correcto
+            keyFrames = keyFrames.OrderBy(kf => kf.Time).ToList();
+
+          
+            PlayAnimation();
+        }
+
+        private Vertex Interpolate(Vertex start, Vertex end, float t)
+        {
+            float x = start[0] + (end[0] - start[0]) * t;
+            float y = start[1] + (end[1] - start[1]) * t;
+            float z = start[2] + (end[2] - start[2]) * t;
+
+            return new Vertex(new float[] { x, y, z });
+        }
+
+
+
+        private void PlayAnimation()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            for (int i = 0; i < keyFrames.Count - 1; i++)
+            {
+                var startFrame = keyFrames[i];
+                var endFrame = keyFrames[i + 1];
+                float frameDuration = endFrame.Time - startFrame.Time;
+
+                while (stopwatch.Elapsed.TotalSeconds < endFrame.Time)
+                {
+                    float t = (float)((stopwatch.Elapsed.TotalSeconds - startFrame.Time) / frameDuration);
+                    List<Vertex> interpolatedVertices = new List<Vertex>();
+
+                    for (int j = 0; j < startFrame.Vertices.Count; j++)
+                    {
+                        interpolatedVertices.Add(Interpolate(startFrame.Vertices[j], endFrame.Vertices[j], t));
+                    }
+
+                    figuraActual.Puntos = interpolatedVertices;
+                    Redibujar();
+
+                    Application.DoEvents(); // Mantén la UI responsiva
+                }
+            }
+
+            stopwatch.Stop();
         }
 
     }

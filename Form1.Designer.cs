@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Cuadrado");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Triangulo");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Circulo");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Cuadrado");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Triangulo");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Circulo");
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.LBL_TRASLATION = new System.Windows.Forms.Label();
             this.BTN_DOWN = new System.Windows.Forms.Button();
@@ -284,6 +284,7 @@
             this.BTN_PLAY.TabIndex = 41;
             this.BTN_PLAY.Text = "PLAY";
             this.BTN_PLAY.UseVisualStyleBackColor = false;
+            this.BTN_PLAY.Click += new System.EventHandler(this.BTN_PLAY_Click);
             // 
             // BTN_KEYFRAME
             // 
@@ -327,16 +328,16 @@
             this.treeView1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
             this.treeView1.Location = new System.Drawing.Point(23, 34);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "NODE_CUADRADO";
-            treeNode1.Text = "Cuadrado";
-            treeNode2.Name = "NODE_Triangulo";
-            treeNode2.Text = "Triangulo";
-            treeNode3.Name = "NODE_CIRCULO";
-            treeNode3.Text = "Circulo";
+            treeNode4.Name = "NODE_CUADRADO";
+            treeNode4.Text = "Cuadrado";
+            treeNode5.Name = "NODE_Triangulo";
+            treeNode5.Text = "Triangulo";
+            treeNode6.Name = "NODE_CIRCULO";
+            treeNode6.Text = "Circulo";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3});
+            treeNode4,
+            treeNode5,
+            treeNode6});
             this.treeView1.Size = new System.Drawing.Size(106, 59);
             this.treeView1.TabIndex = 46;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect_1);
