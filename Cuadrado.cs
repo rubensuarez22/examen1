@@ -12,12 +12,12 @@ namespace Transformaciones
         public Cuadrado(int lado)
         {
             int L = lado / 2;
-            Puntos.Add(new PointF(-L, L));
-            Puntos.Add(new PointF(L, L));
-            Puntos.Add(new PointF(L, -L));
-            Puntos.Add(new PointF(-L, -L));
+            Puntos.Add(new Vertex(new float[] { -L, L, 0 }));
+            Puntos.Add(new Vertex(new float[] { L, L, 0 }));
+            Puntos.Add(new Vertex(new float[] { L, -L, 0 }));
+            Puntos.Add(new Vertex(new float[] { -L, -L, 0 }));
 
-            InitializeCentroid();
+            //InitializeCentroid();
         }
 
 

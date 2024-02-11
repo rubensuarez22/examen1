@@ -17,9 +17,9 @@ namespace Transformaciones
 
             axis = new float[,]{
 
-               /*  Rotacion en Y */{cos, 0, sin}, {0, 1, 0}, {-sin, 0, cos}, 
+               /*  Rotacion en Y {cos, 0, sin}, {0, 1, 0}, {-sin, 0, cos},*/ 
 
-               /* Rotacion en X {1, 0, 0}, {0, cos, -sin}, {0, sin, cos }, */
+               /* Rotacion en X*/ {1, 0, 0}, {0, cos, -sin}, {0, sin, cos }, 
 
 
                /*Rotacion en Z { cos, -sin, 0 },

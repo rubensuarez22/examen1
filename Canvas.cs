@@ -10,58 +10,52 @@ namespace Transformaciones
     public class Canvas
     {
         public Bitmap Bmp;
-        public Graphics g;
-        private double angle;
+        private Graphics g;
 
-
-        //CANVAS TIENE EL OBJETO GRAPHICS Y LA CLASE RENDER.
-        public Canvas(Bitmap bmp, double angle)
+        public Canvas(Bitmap bmp)
         {
             Bmp = bmp;
             g = Graphics.FromImage(bmp);
-            this.angle = angle;
-            
         }
 
-            public void Render(PointF a, PointF b)
+        // Método general para renderizar cualquier figura
+        public void RenderFigura(Figura figura)
         {
-            PointF a2, b2;
-            int Sx = (Bmp.Width / 2);
-            int Sy = (Bmp.Height / 2);
+            int Sx = Bmp.Width / 2;
+            int Sy = Bmp.Height / 2;
 
-            //Creo que modificando Sx puedo mover el cuadrado a gusto.
-
-            a2 = new PointF(Sx + a.X, Sy - a.Y);
-             b2 = new PointF(Sx + b.X, Sy - b.Y);
-
-
-            a2.X = Sx + (float)((a.X * Math.Cos(angle)) - (a.Y * Math.Sin(angle)));
-            a2.Y = Sy - (float)((a.X * Math.Sin(angle)) + (a.Y * Math.Cos(angle)));
-
-
-            b2.X = Sx + (float)((b.X * Math.Cos(angle)) - (b.Y * Math.Sin(angle)));
-            b2.Y = Sy - (float)((b.X * Math.Sin(angle)) + (b.Y * Math.Cos(angle)));
-
-            g.DrawLine(Pens.Gray, a2, b2);
-
-
-
-
+            if (figura.Puntos.Count > 0)
+            {
+                for (int i = 0; i < figura.Puntos.Count - 1; i++)
+                {
+                    RenderLine(figura.Puntos[i], figura.Puntos[i + 1], Sx, Sy);
+                }
+                // Conecta el último punto con el primero para cerrar la figura
+                RenderLine(figura.Puntos[figura.Puntos.Count - 1], figura.Puntos[0], Sx, Sy);
+            }
         }
 
-            public void cruzCanvas()
+        // Método auxiliar para dibujar una línea entre dos Vertex, trasladando al centro del Canvas
+        private void RenderLine(Vertex a, Vertex b, int Sx, int Sy)
         {
-            int Sx = (Bmp.Width / 2);
-            int Sy = (Bmp.Height / 2);
-            // Dibuja la línea horizontal (Eje X)
+            PointF pointA = new PointF(Sx + a[0], Sy - a[1]);
+            PointF pointB = new PointF(Sx + b[0], Sy - b[1]);
+
+            g.DrawLine(Pens.Gray, pointA, pointB);
+        }
+
+        public void cruzCanvas()
+        {
+            int Sx = Bmp.Width / 2;
+            int Sy = Bmp.Height / 2;
             g.DrawLine(Pens.Yellow, 0, Sy, Bmp.Width, Sy);
-            // Dibuja la línea vertical (Eje Y)
             g.DrawLine(Pens.Yellow, Sx, 0, Sx, Bmp.Height);
         }
 
-            public void ClearCanvas(Color color)
+        public void ClearCanvas(Color color)
         {
             g.Clear(color);
         }
     }
+
 }

@@ -18,10 +18,11 @@ namespace Transformaciones
             {
                 float x = radio * (float)Math.Cos(i * angleIncrement);
                 float y = radio * (float)Math.Sin(i * angleIncrement);
-                Puntos.Add(new PointF(x, y));
+                // Crear un Vertex para cada punto y agregarlo a la lista Puntos
+                Puntos.Add(new Vertex(new float[] { x, y, 0 })); // Asumiendo un círculo en el plano XY, Z = 0
             }
 
-            InitializeCentroid();
+            //InitializeCentroid();
         }
     }
 }
