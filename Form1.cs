@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
+
 namespace Transformaciones
 {
     public partial class Form1 : Form
@@ -35,7 +36,7 @@ namespace Transformaciones
 
             canvas.cruzCanvas();
 
-      
+            
 
             PCT_CANVAS.Image = bmp;
 
@@ -44,9 +45,26 @@ namespace Transformaciones
             CHECKBOX_RotacionY.CheckedChanged += Checkbox_Rotacion_CheckedChanged;
             CHECKBOX_RotacionZ.CheckedChanged += Checkbox_Rotacion_CheckedChanged;
 
-            TRACKBAR_ANGLE.Minimum = 0;
-            TRACKBAR_ANGLE.Maximum = 360; // Permite una rotación completa
+            TRACKBAR_ANGLE.Minimum = -10;
+            TRACKBAR_ANGLE.Maximum = 10; 
             TRACKBAR_ANGLE.Value = 0; // Valor inicial
+            TRACKBAR_ANGLE.Scroll += TRACKBAR_ANGLE_Scroll;
+            TRACKBAR_ANGLE.MouseUp += TRACKBAR_MouseUp;
+
+
+            TRACKBAR_SCALE.Minimum = -10;  // Representa un factor de escala de -1.0 (reducción al 10% del tamaño original)
+            TRACKBAR_SCALE.Maximum = 10;   // Representa un factor de escala de 1.0 (aumento al doble del tamaño original)
+            TRACKBAR_SCALE.Value = 0;      // Valor inicial en el centro, que representa un factor de escala de 1.0 (sin cambio de tamaño)
+            TRACKBAR_SCALE.TickFrequency = 1; // Establece la frecuencia de los ticks para que cada movimiento sea de 0.1 en escala
+            TRACKBAR_SCALE.SmallChange = 1;   // Cambio pequeño para el control TrackBar (esto hace que el control responda a pequeños cambios)
+            TRACKBAR_SCALE.LargeChange = 1;
+            TRACKBAR_SCALE.Scroll += TRACKBAR_SCALE_Scroll;
+            TRACKBAR_SCALE.MouseUp += TRACKBAR_MouseUp;
+
+
+
+
+
 
             TIMER1.Interval = 10; 
             TIMER1.Tick += RotarFigura;
@@ -69,7 +87,12 @@ namespace Transformaciones
         }
 
 
-
+        private void TRACKBAR_MouseUp(object sender, MouseEventArgs e)
+        {
+            // Restablece el valor del TrackBar al centro (0) cuando se suelta el botón del mouse
+            TRACKBAR_ANGLE.Value = 0;
+            TRACKBAR_SCALE.Value = 0;
+        }
 
         private void BTN_ClearCanvas_Click(object sender, EventArgs e)
         {
@@ -79,14 +102,14 @@ namespace Transformaciones
         private void BTN_UP_Click(object sender, EventArgs e)
         {
             // Mueve la figura hacia arriba en 10 unidades
-            figuraActual.Translate(new Vertex(new float[] { 0, -10, 0 }));
+            figuraActual.Translate(new Vertex(new float[] { 0, 10, 0 }));
             Redibujar();
         }
 
         private void BTN_DOWN_Click(object sender, EventArgs e)
         {
             // Mueve la figura hacia abajo en 10 unidades
-            figuraActual.Translate(new Vertex(new float[] { 0, 10, 0 }));
+            figuraActual.Translate(new Vertex(new float[] { 0, -10, 0 }));
             Redibujar();
         }
 
@@ -141,7 +164,6 @@ namespace Transformaciones
             angle = angleRadianes;
 
             // Actualiza el texto del Label con el valor del ángulo en grados
-            LBL_ANGULO.Text = "ANGLE: " + angleGrados;
             float[,] rotationMatrixZ = new float[,]
                 {
             { (float)Math.Cos(angleRadianes), -(float)Math.Sin(angleRadianes), 0 },
@@ -159,61 +181,6 @@ namespace Transformaciones
         {
             //figuraActual.TranslateToCenter();
             Redibujar();
-        }
-
-        private void BTN_SCALE_Click(object sender, EventArgs e)
-        {
-            if (figuraActual != null)
-            {
-                figuraActual.ScaleFigure(1.1f); // Aumenta el tamaño en un 10%
-                Redibujar();
-            }
-        }
-
-        private void BTN_REDUCESCALE_Click(object sender, EventArgs e)
-        {
-            float scaleFactor = 0.9f;
-
-            // Aplica la reducción de escala a la figura actual
-            figuraActual.ScaleFigure(scaleFactor);
-            Redibujar();
-        }
-
-        private void BTN_SQUARE_Click(object sender, EventArgs e)
-        {
-            figuraActual = new Cuadrado(50); // Asegúrate de tener una clase Square implementada similar a Triangle
-            Redibujar();
-        }
-
-        private void BTN_TRIANGLE_Click(object sender, EventArgs e)
-        {
-            figuraActual = new Triangle(50);
-            Redibujar();
-        }
-        private void BTN_CIRCULO_Click(object sender, EventArgs e)
-        {
-            figuraActual = new Circulo(50);
-            Redibujar();
-        }
-
-        private void TIMER_CENTROID_Tick(object sender, EventArgs e)
-        {
-            //figuraActual.InitializeCentroid();
-        }
-
-        private void LBL_ANGULO_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void PCT_CANVAS_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void Checkbox_Rotacion_CheckedChanged(object sender, EventArgs e)
@@ -251,13 +218,48 @@ namespace Transformaciones
                 Redibujar();
             }
         }
+        private void TRACKBAR_SCALE_Scroll(object sender, EventArgs e)
+        {
+            if (figuraActual != null)
+            {
+                // Convierte el valor del TrackBar a un factor de escala (dividiendo por 10 para obtener incrementos de 0.1)
+                float scaleFactor = 1 + (TRACKBAR_SCALE.Value / 20.0f);
 
+                figuraActual.ScaleFigure(scaleFactor);
+                Redibujar();
+            }
+        }
 
-
-
-        private void TIMER1_Tick(object sender, EventArgs e)
+        private void BTN_KEYFRAME_Click(object sender, EventArgs e)
         {
 
         }
+
+
+        private void treeView1_AfterSelect_1(object sender, TreeViewEventArgs e)
+        {
+            TreeNode selectedNode = e.Node;
+
+            // Decide la acción basada en el texto del nodo
+            switch (selectedNode.Text)
+            {
+                case "Cuadrado":
+                    // Código para manejar la selección de cuadrado
+                    figuraActual = new Cuadrado(50); // Asume que tienes una clase Cuadrado
+                    break;
+                case "Circulo":
+                    // Código para manejar la selección de círculo
+                    figuraActual = new Circulo(50); // Asume que tienes una clase Circulo
+                    break;
+                case "Triangulo":
+                    // Código para manejar la selección de triángulo
+                    figuraActual = new Triangle(50); // Asume que tienes una clase Triangulo
+                    break;
+            }
+
+            // Finalmente, redibuja la figura seleccionada
+            Redibujar();
+        }
+
     }
 }
